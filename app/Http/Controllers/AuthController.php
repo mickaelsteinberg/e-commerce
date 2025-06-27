@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\User;
 
 class AuthController extends Controller
 {
@@ -48,5 +49,18 @@ class AuthController extends Controller
     public function register()
     {
         return view('auth.register');
+    }
+
+    public function doRegister(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required',
+            'email' => 'required',
+            'password' => 'required|confirmed|min:4',
+        ]);
+
+        User::create($validated);
+        
+        return to_route('login');
     }
 }
